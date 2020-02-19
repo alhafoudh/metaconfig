@@ -1,4 +1,4 @@
-require "metaconfig/version"
+require 'metaconfig/version'
 
 module Metaconfig
   class Error < StandardError; end
