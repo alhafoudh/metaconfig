@@ -28,6 +28,8 @@ module Metaconfig
             klass.new
           end
 
+          protected
+
           def build(definition)
             @definition = definition
             build_settings
