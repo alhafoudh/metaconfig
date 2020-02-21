@@ -3,11 +3,13 @@ module Metaconfig
     class Setting
       attr_reader :name
       attr_reader :type
+      attr_accessor :loader
       attr_reader :options
 
-      def initialize(name, type = :string, **options)
+      def initialize(name, type = :string, loader: nil, **options)
         @name = name
         @type = type
+        @loader = loader
         @options = options
       end
 

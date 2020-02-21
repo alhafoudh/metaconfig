@@ -33,8 +33,8 @@ module Metaconfig
 
     private
 
-    def build(definition, parent)
-      Values::Settings.build_from(definition, parent)
+    def build(definition, parent_class)
+      Values::Settings.build_from(definition, parent_class)
     end
   end
 end

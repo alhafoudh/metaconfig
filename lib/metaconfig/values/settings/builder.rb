@@ -21,6 +21,8 @@ module Metaconfig
           attr_reader :definition
 
           def build_from(definition, parent_class)
+            definition.assign_default_loaders
+
             klass = Class.new(self)
             klass.build(definition)
             parent_class.const_set("#{definition.name.capitalize}Settings", klass)

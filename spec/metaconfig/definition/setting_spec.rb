@@ -1,11 +1,12 @@
 RSpec.describe Metaconfig::Definition::Setting do
   let(:name) { instance_double(Symbol) }
   let(:type) { instance_double(Symbol) }
+  let(:loader) { double }
   let(:foo_option) { double }
   let(:options) { { foo: foo_option } }
 
   subject do
-    Metaconfig::Definition::Setting.new(name, type, **options)
+    Metaconfig::Definition::Setting.new(name, type, loader: loader, **options)
   end
 
   it 'should have name' do
@@ -24,6 +25,10 @@ RSpec.describe Metaconfig::Definition::Setting do
     it 'should have default type' do
       expect(subject.type).to eq :string
     end
+  end
+
+  it 'should have loader' do
+    expect(subject.loader).to eq loader
   end
 
   it 'should have options' do
