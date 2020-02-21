@@ -3,7 +3,28 @@ RSpec.describe Metaconfig do
     expect(Metaconfig::VERSION).not_to be nil
   end
 
-  context 'with definition' do
+  context '#configure' do
+    subject do
+      Metaconfig.configure do
+        default_loader :some_loader_impl
+
+        loader :other_loader, :other_loader_impl
+        loader :another_loader, :another_loader_impl
+      end
+      Metaconfig.config
+    end
+
+    it 'should sets up default loader' do
+      expect(subject.default_loader).to eq :some_loader_impl
+    end
+
+    it 'should sets up loaders' do
+      expect(subject.loaders[:other_loader]).to eq :other_loader_impl
+      expect(subject.loaders[:another_loader]).to eq :another_loader_impl
+    end
+  end
+
+  context '#define' do
     let!(:definition) do
       Metaconfig.define do
         setting :secret_key_base, :string, required: true
@@ -15,14 +36,70 @@ RSpec.describe Metaconfig do
       end
     end
 
-    context '#define' do
-      it 'should have name' do
-        expect(definition.name).to eq :root
+    it 'should have name' do
+      expect(definition.name).to eq :root
+    end
+
+    context 'secret_key_base setting' do
+      let(:setting) do
+        definition.settings[0]
       end
 
-      context 'secret_key_base setting' do
+      it 'should exist' do
+        expect(setting).not_to be_nil
+      end
+
+      it 'should have name' do
+        expect(setting.name).to eq :secret_key_base
+      end
+
+      it 'should be of type string' do
+        expect(setting.type).to eq :string
+      end
+
+      it 'should be required' do
+        expect(setting.required).to eq true
+      end
+    end
+
+    context 'postmark_api_token setting' do
+      let(:setting) do
+        definition.settings[1]
+      end
+
+      it 'should exist' do
+        expect(setting).not_to be_nil
+      end
+
+      it 'should have name' do
+        expect(setting.name).to eq :postmark_api_token
+      end
+
+      it 'should be of type string' do
+        expect(setting.type).to eq :string
+      end
+
+      it 'should not be required by proc' do
+        expect(setting.required).to be_a(Proc)
+      end
+    end
+
+    context 'mail section' do
+      let(:section) do
+        definition.section[0]
+      end
+
+      it 'should exist' do
+        expect(section).not_to be_nil
+      end
+
+      it 'should have name' do
+        expect(section.name).to eq :mail
+      end
+
+      context 'from setting' do
         let(:setting) do
-          definition.settings[0]
+          section.settings[0]
         end
 
         it 'should exist' do
@@ -30,21 +107,21 @@ RSpec.describe Metaconfig do
         end
 
         it 'should have name' do
-          expect(setting.name).to eq :secret_key_base
+          expect(setting.name).to eq :from
         end
 
-        it 'should be of type string' do
-          expect(setting.type).to eq :string
+        it 'should be of type email' do
+          expect(setting.type).to eq :email
         end
 
-        it 'should be required' do
+        it 'should be required by proc' do
           expect(setting.required).to eq true
         end
       end
 
-      context 'postmark_api_token setting' do
+      context 'override_to setting' do
         let(:setting) do
-          definition.settings[1]
+          section.settings[1]
         end
 
         it 'should exist' do
@@ -52,73 +129,15 @@ RSpec.describe Metaconfig do
         end
 
         it 'should have name' do
-          expect(setting.name).to eq :postmark_api_token
+          expect(setting.name).to eq :override_to
         end
 
-        it 'should be of type string' do
-          expect(setting.type).to eq :string
+        it 'should be of type email' do
+          expect(setting.type).to eq :email
         end
 
-        it 'should not be required by proc' do
-          expect(setting.required).to be_a(Proc)
-        end
-      end
-
-      context 'mail section' do
-        let(:section) do
-          definition.section[0]
-        end
-
-        it 'should exist' do
-          expect(section).not_to be_nil
-        end
-
-        it 'should have name' do
-          expect(section.name).to eq :mail
-        end
-
-        context 'from setting' do
-          let(:setting) do
-            section.settings[0]
-          end
-
-          it 'should exist' do
-            expect(setting).not_to be_nil
-          end
-
-          it 'should have name' do
-            expect(setting.name).to eq :from
-          end
-
-          it 'should be of type email' do
-            expect(setting.type).to eq :email
-          end
-
-          it 'should be required by proc' do
-            expect(setting.required).to eq true
-          end
-        end
-
-        context 'override_to setting' do
-          let(:setting) do
-            section.settings[1]
-          end
-
-          it 'should exist' do
-            expect(setting).not_to be_nil
-          end
-
-          it 'should have name' do
-            expect(setting.name).to eq :override_to
-          end
-
-          it 'should be of type email' do
-            expect(setting.type).to eq :email
-          end
-
-          it 'should not be required by default' do
-            expect(setting.required).to eq false
-          end
+        it 'should not be required by default' do
+          expect(setting.required).to eq false
         end
       end
     end
