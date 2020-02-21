@@ -16,6 +16,16 @@ RSpec.describe Metaconfig::Definition::Setting do
     expect(subject.type).to eq type
   end
 
+  context 'without specifying type' do
+    subject do
+      Metaconfig::Definition::Setting.new(name, **options)
+    end
+
+    it 'should have default type' do
+      expect(subject.type).to eq :string
+    end
+  end
+
   it 'should have options' do
     expect(subject.options).to eq options
   end

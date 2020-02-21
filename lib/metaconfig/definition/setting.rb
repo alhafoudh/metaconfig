@@ -5,7 +5,7 @@ module Metaconfig
       attr_reader :type
       attr_reader :options
 
-      def initialize(name, type, **options)
+      def initialize(name, type = :string, **options)
         @name = name
         @type = type
         @options = options
