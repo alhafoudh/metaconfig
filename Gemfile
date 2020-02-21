@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 group :development, :test do
   gem 'pry', '~> 0.12'
+  gem 'rubycritic', '~> 4.4'
 end
 
 group :test do

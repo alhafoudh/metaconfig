@@ -15,6 +15,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'simplecov'
+require 'pry'
 
 SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter]
 
@@ -24,9 +25,6 @@ SimpleCov.start do
 end
 
 require 'metaconfig'
-require 'pry'
-
-Dir['./lib/**/*.rb'].sort.each { |file| require file }
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
