@@ -5,6 +5,8 @@ module Metaconfig
     def self.included(base)
       base.send :include, InstanceMethods
       base.extend ClassMethods
+
+      base.configure {}
     end
 
     module InstanceMethods
