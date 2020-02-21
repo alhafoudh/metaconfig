@@ -14,7 +14,9 @@ module Metaconfig
 
       def define(&block)
         undefine
-        @definition = Definition::Section.new(&block)
+        @definition = Definition::Section.new
+        Definition::DSL.new(definition, &block)
+
         reload
         definition
       end

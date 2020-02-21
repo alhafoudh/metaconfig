@@ -86,7 +86,7 @@ RSpec.describe Metaconfig do
 
     context 'mail section' do
       let(:section) do
-        definition.section[0]
+        definition.sections[0]
       end
 
       it 'should exist' do
