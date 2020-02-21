@@ -1,21 +1,3 @@
-RSpec.shared_examples :it_has_section_attributes do
-  it 'should have name' do
-    expect(subject.name).to eq name
-  end
-
-  it 'should have settings' do
-    expect(subject.settings).to eq settings
-  end
-
-  it 'should have sections' do
-    expect(subject.sections).to eq sections
-  end
-
-  it 'should have options' do
-    expect(subject.options).to eq options
-  end
-end
-
 RSpec.describe Metaconfig::Definition::Section do
   let(:name) { instance_double(Symbol) }
   let(:options) { { foo: double } }
@@ -37,7 +19,21 @@ RSpec.describe Metaconfig::Definition::Section do
       Metaconfig::Definition::Section.new(name, settings: settings, sections: sections, **options)
     end
 
-    it_behaves_like :it_has_section_attributes
+    it 'should have name' do
+      expect(subject.name).to eq name
+    end
+
+    it 'should have options' do
+      expect(subject.options).to eq options
+    end
+
+    it 'should have settings' do
+      expect(subject.settings).to eq settings
+    end
+
+    it 'should have sections' do
+      expect(subject.sections).to eq sections
+    end
   end
 
   context 'initialize by block' do
