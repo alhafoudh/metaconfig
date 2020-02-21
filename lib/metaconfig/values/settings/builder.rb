@@ -12,7 +12,7 @@ module Metaconfig
             klass = self.class
             klass.definition.sections.map do |section|
               section_instance = klass.build_from(section, self.class)
-              _set_value(section.name, section_instance)
+              set_value(section.name, section_instance)
             end
           end
         end
