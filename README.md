@@ -29,16 +29,16 @@ Or install it yourself as:
 # MAIL_OVERRIDE_TO=dave@example.com
 
 Metaconfig.configure do
-    default_loader Metaconfig::Loaders::EnvLoader.new
+  default_loader Metaconfig::Loaders::EnvLoader.new
 end
 
 Metaconfig.define do
-    setting :secret_key_base, :string, required: true
-    setting :postmark_api_token, :string
-    section :mail do
-        setting :from, :email, required: true
-        setting :override_to, :email
-    end
+  setting :secret_key_base, :string, required: true
+  setting :postmark_api_token, :string
+  section :mail do
+    setting :from, :email, required: true
+    setting :override_to, :email
+  end
 end
 
 puts Metaconfig.secret_key_base
