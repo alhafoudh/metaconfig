@@ -25,7 +25,7 @@ RSpec.describe Metaconfig do
   end
 
   context '#define' do
-    let!(:definition) do
+    let(:definition) do
       Metaconfig.define do
         setting :secret_key_base, :string, required: true
         setting :postmark_api_token, :string, required: -> { false }
@@ -141,34 +141,55 @@ RSpec.describe Metaconfig do
         end
       end
     end
+  end
 
-    context 'access settings' do
-      context 'secret_key_base setting' do
-        let(:value) do
-          Metaconfig.secret_key_base
-        end
-
-        it 'should be accessible' do
-          value
+  context 'access settings' do
+    before(:each) do
+      class Loader
+        def read(key)
+          { 'secret_key_base' => 'xxx' }[key.to_s]
         end
       end
 
-      context '#to_h' do
-        subject do
-          Metaconfig
-        end
+      Metaconfig.configure do
+        default_loader Loader.new
+      end
 
-        it 'should be able to be converted to hash' do
-          expected = a_hash_including(
-              secret_key_base: anything,
-              postmark_api_token: anything,
-              mail: a_hash_including(
-                  from: anything,
-                  override_to: anything
-              )
-          )
-          expect(subject.to_h).to expected
+      Metaconfig.define do
+        setting :secret_key_base, :string, required: true
+        setting :postmark_api_token, :string, required: -> { false }
+        section :mail do
+          setting :from, :email, required: true
+          setting :override_to, :email
         end
+      end
+    end
+
+    context 'secret_key_base setting' do
+      let(:value) do
+        Metaconfig.secret_key_base
+      end
+
+      it 'should be accessible' do
+        expect(value).to eq 'xxx'
+      end
+    end
+
+    context '#to_h' do
+      subject do
+        Metaconfig
+      end
+
+      it 'should be able to be converted to hash' do
+        expected = a_hash_including(
+            secret_key_base: anything,
+            postmark_api_token: anything,
+            mail: a_hash_including(
+                from: anything,
+                override_to: anything
+            )
+        )
+        expect(subject.to_h).to expected
       end
     end
   end

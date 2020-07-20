@@ -40,7 +40,8 @@ module Metaconfig
       def load_settings_values
         self.class.definition.settings.map do |setting|
           name = setting.name
-          set_value(name, :"#{name} value")
+          value = setting.value
+          set_value(name, value)
         end
       end
 

@@ -13,8 +13,22 @@ module Metaconfig
         @options = options
       end
 
+      def key
+        name # TODO: build key
+      end
+
       def required
         options.fetch(:required, false)
+      end
+
+      def active_loader
+        loader || Metaconfig.config.default_loader
+      end
+
+      def value
+        return if active_loader.nil? || !active_loader.respond_to?(:read)
+
+        active_loader.read(key)
       end
     end
   end
