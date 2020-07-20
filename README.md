@@ -41,8 +41,8 @@ Metaconfig.define do
   end
 end
 
-puts Metaconfig.secret_key_base
-puts Metaconfig.mail.from
+puts Metaconfig.secret_key_base # => 123
+puts Metaconfig.mail.from # => john@example.com
 ```
 
 ## Development
