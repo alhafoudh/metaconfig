@@ -1,6 +1,7 @@
 require 'metaconfig/version'
 require 'metaconfig/definition'
 require 'metaconfig/values'
+require 'metaconfig/loaders'
 
 require 'metaconfig/configure'
 require 'metaconfig/define'

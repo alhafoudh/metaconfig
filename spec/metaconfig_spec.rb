@@ -28,7 +28,7 @@ RSpec.describe Metaconfig do
     let(:definition) do
       Metaconfig.define do
         setting :secret_key_base, :string, required: true
-        setting :postmark_api_token, :string, required: -> { false }
+        setting :postmark_api_token, :string
         section :mail do
           setting :from, :email, required: true
           setting :override_to, :email
@@ -77,10 +77,6 @@ RSpec.describe Metaconfig do
 
       it 'should be of type string' do
         expect(setting.type).to eq :string
-      end
-
-      it 'should not be required by proc' do
-        expect(setting.required).to be_a(Proc)
       end
     end
 
@@ -145,24 +141,20 @@ RSpec.describe Metaconfig do
 
   context 'access settings' do
     before(:each) do
-      class Loader
-        def read(key)
-          {
-              'secret_key_base' => 'xxx',
-              'mail' => {
-                  'from' => 'yyy'
-              }
-          }.dig(*key[1..-1].map(&:to_s))
-        end
-      end
+      data = {
+          secret_key_base: 'xxx',
+          mail: {
+              from: 'yyy'
+          }
+      }
 
       Metaconfig.configure do
-        default_loader Loader.new
+        default_loader Metaconfig::Loaders::HashLoader.new(data)
       end
 
       Metaconfig.define do
         setting :secret_key_base, :string, required: true
-        setting :postmark_api_token, :string, required: -> { false }
+        setting :postmark_api_token, :string
         section :mail do
           setting :from, :email, required: true
           setting :override_to, :email

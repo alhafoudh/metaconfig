@@ -34,4 +34,9 @@ RSpec.describe Metaconfig::Definition::Setting do
   it 'should have options' do
     expect(subject.options).to eq options
   end
+
+  context 'loader' do
+    it 'should reads value from loader'
+    it 'should handles non-existing value from loader'
+  end
 end

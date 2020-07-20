@@ -20,7 +20,9 @@ module Metaconfig
       end
 
       def required
-        options.fetch(:required, false)
+        val = options.fetch(:required, false)
+        return val if [true, false].include?(val)
+        false
       end
 
       def active_loader
@@ -31,6 +33,9 @@ module Metaconfig
         return if active_loader.nil? || !active_loader.respond_to?(:read)
 
         active_loader.read(key_path)
+      rescue Loaders::Errors::MissingKeyValueError => ex
+        raise ex if required # TODO: this must be different custom error
+        nil # TODO: default value should be used if any
       end
     end
   end
