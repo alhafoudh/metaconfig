@@ -1,6 +1,7 @@
 module Metaconfig
   module Definition
     class Section
+      attr_accessor :parents
       attr_reader :name
       attr_reader :settings
       attr_reader :sections
@@ -9,6 +10,7 @@ module Metaconfig
       attr_accessor :loader
 
       def initialize(name = :root, settings: [], sections: [], loader: nil, **options)
+        @parents = []
         @name = name
         @settings = settings
         @sections = sections

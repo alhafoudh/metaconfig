@@ -147,7 +147,12 @@ RSpec.describe Metaconfig do
     before(:each) do
       class Loader
         def read(key)
-          { 'secret_key_base' => 'xxx' }[key.to_s]
+          {
+              'secret_key_base' => 'xxx',
+              'mail' => {
+                  'from' => 'yyy'
+              }
+          }.dig(*key[1..-1].map(&:to_s))
         end
       end
 
@@ -165,13 +170,23 @@ RSpec.describe Metaconfig do
       end
     end
 
-    context 'secret_key_base setting' do
+    context 'root setting' do
       let(:value) do
         Metaconfig.secret_key_base
       end
 
       it 'should be accessible' do
         expect(value).to eq 'xxx'
+      end
+    end
+
+    context 'nested setting' do
+      let(:value) do
+        Metaconfig.mail.from
+      end
+
+      it 'should be accessible' do
+        expect(value).to eq 'yyy'
       end
     end
 

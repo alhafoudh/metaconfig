@@ -24,6 +24,7 @@ module Metaconfig
       def reload
         @root = build(definition, self)
 
+        root.load_keys
         root.load_values
       end
 

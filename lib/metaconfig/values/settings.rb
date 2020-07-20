@@ -30,6 +30,19 @@ module Metaconfig
         hash
       end
 
+      def load_keys(section = self.class.definition)
+        section.settings.map do |setting|
+          setting.parents += section.parents
+          setting.parents << section
+        end
+
+        section.sections.map do |subsection|
+          subsection.parents += section.parents
+          subsection.parents << section
+          load_keys(subsection)
+        end
+      end
+
       def load_values
         load_settings_values
         load_section_values
