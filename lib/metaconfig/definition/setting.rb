@@ -25,17 +25,19 @@ module Metaconfig
         false
       end
 
+      def default_value
+        options.fetch(:default, nil)
+      end
+
       def active_loader
         loader || Metaconfig.config.default_loader
       end
 
       def value
-        return if active_loader.nil? || !active_loader.respond_to?(:read)
-
         active_loader.read(key_path)
       rescue Loaders::Errors::MissingKeyValueError => ex
-        raise ex if required # TODO: this must be different custom error
-        nil # TODO: default value should be used if any
+        raise(Errors::MissingSettingValueError, receiver: self, key: ex.key) if required
+        default_value
       end
     end
   end

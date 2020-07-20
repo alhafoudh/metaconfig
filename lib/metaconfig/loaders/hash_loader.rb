@@ -8,7 +8,7 @@ module Metaconfig
       end
 
       def read(key)
-        raise Errors::MissingKeyValueError.new(receiver: self, key: key) unless has_key?(key)
+        raise(Errors::MissingKeyValueError, receiver: self, key: key) unless has_key?(key)
 
         hash.dig(*key)
       end

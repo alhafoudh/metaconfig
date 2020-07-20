@@ -20,11 +20,17 @@ RSpec.describe Metaconfig::Loaders::HashLoader do
 
   context 'undefined key' do
     it 'should raise exception for undefined root key' do
-      expect { subject.read([:not_exist]) }.to raise_error(KeyError)
+      expect { subject.read([:not_exist]) }.to raise_error(KeyError) do |error|
+        expect(error.receiver).to eq subject
+        expect(error.key).to eq [:not_exist]
+      end
     end
 
     it 'should raise exception for undefined nested key' do
-      expect { subject.read([:bar, :not_exist]) }.to raise_error(KeyError)
+      expect { subject.read([:bar, :not_exist]) }.to raise_error(KeyError) do |error|
+        expect(error.receiver).to eq subject
+        expect(error.key).to eq [:bar, :not_exist]
+      end
     end
   end
 end

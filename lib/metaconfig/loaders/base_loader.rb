@@ -1,7 +1,7 @@
 module Metaconfig
   module Loaders
     class BaseLoader
-      def read
+      def read(key)
         raise NotImplementedError
       end
 

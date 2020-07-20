@@ -1,6 +1,8 @@
 require 'metaconfig/loaders/errors/missing_key_value_error'
 
 module Metaconfig
-  module Errors
+  module Loaders
+    module Errors
+    end
   end
 end
