@@ -2,7 +2,8 @@ RSpec.describe Metaconfig::Loaders::EnvLoader do
   subject do
     Metaconfig::Loaders::EnvLoader.new({
         'FOO' => 'abc',
-        'BAR_BAZ' => 'def'
+        'BAR_BAZ' => 'def',
+        'SOMETHING_VERY_DEEPLY_NESTED' => 'xxx'
     })
   end
 
@@ -13,6 +14,10 @@ RSpec.describe Metaconfig::Loaders::EnvLoader do
 
     it 'should return value for nested setting' do
       expect(subject.read([:bar, :baz])).to eq 'def'
+    end
+
+    it 'should return value for nested setting with underscores in name' do
+      expect(subject.read([:something, :very_deeply, :nested])).to eq 'xxx'
     end
   end
 
