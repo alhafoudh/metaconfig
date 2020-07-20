@@ -34,6 +34,8 @@ module Metaconfig
       end
 
       def value
+        return default_value if active_loader.nil?
+
         active_loader.read(key_path)
       rescue Loaders::Errors::MissingKeyValueError => ex
         raise(Errors::MissingSettingValueError, receiver: self, key: ex.key) if required
