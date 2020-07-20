@@ -4,23 +4,39 @@ RSpec.describe Metaconfig do
   end
 
   context '#configure' do
-    subject do
-      Metaconfig.configure do
-        default_loader :some_loader_impl
+    let(:default_loader) do
+      Metaconfig::Loaders::HashLoader.new({})
+    end
 
-        loader :other_loader, :other_loader_impl
-        loader :another_loader, :another_loader_impl
+    let(:other_loader) do
+      Metaconfig::Loaders::HashLoader.new({})
+    end
+
+    let(:another_loader) do
+      Metaconfig::Loaders::HashLoader.new({})
+    end
+
+    subject do
+      the_default_loader = default_loader
+      the_other_loader = other_loader
+      the_another_loader = another_loader
+
+      Metaconfig.configure do
+        default_loader the_default_loader
+
+        loader :other_loader, the_other_loader
+        loader :another_loader, the_another_loader
       end
       Metaconfig.config
     end
 
     it 'should sets up default loader' do
-      expect(subject.default_loader).to eq :some_loader_impl
+      expect(subject.default_loader).to eq default_loader
     end
 
     it 'should sets up loaders' do
-      expect(subject.loaders[:other_loader]).to eq :other_loader_impl
-      expect(subject.loaders[:another_loader]).to eq :another_loader_impl
+      expect(subject.loaders[:other_loader]).to eq other_loader
+      expect(subject.loaders[:another_loader]).to eq another_loader
     end
   end
 
