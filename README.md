@@ -20,7 +20,30 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# ENV contents:
+#
+# SECRET_KEY_BASE=123
+# POSTMARK_API_TOKEN=123
+# MAIL_FROM=john@example.com
+# MAIL_OVERRIDE_TO=dave@example.com
+
+Metaconfig.configure do
+    default_loader Metaconfig::Loaders::EnvLoader.new
+end
+
+Metaconfig.define do
+    setting :secret_key_base, :string, required: true
+    setting :postmark_api_token, :string
+    section :mail do
+        setting :from, :email, required: true
+        setting :override_to, :email
+    end
+end
+
+puts Metaconfig.secret_key_base
+puts Metaconfig.mail.from
+```
 
 ## Development
 
